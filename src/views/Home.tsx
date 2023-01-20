@@ -1,5 +1,9 @@
 import React from "react";
 
 export const Home = () => {
-  return <div>Home</div>;
+  return (
+    <div className="h-screen w-full flex items-center justify-center">
+      Welcome to the Webtronic Labs POC!
+    </div>
+  );
 };
