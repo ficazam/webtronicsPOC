@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { MailInput, FileInput } from "../components";
+import { MailInput, FileInput, ButtonInput } from "../components";
 
 export const Form = () => {
   const nav = useNavigate();
@@ -32,35 +32,19 @@ export const Form = () => {
   return (
     <div className="h-screen w-full flex items-center justify-center">
       <form>
-        <div className="py-5">
-          <MailInput
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setEmail(e.target.value)
-            }
-            mail={email}
-          />
-        </div>
-        <div className="py-5">
-          <FileInput
-            setFiles={setFiles}
-            files={files}
-            filesPreviews={filesPreviews}
-            setFilesPreviews={setFilesPreviews}
-            title="Upload files here: "
-          />
-        </div>
+        <FileInput
+          setFiles={setFiles}
+          files={files}
+          filesPreviews={filesPreviews}
+          setFilesPreviews={setFilesPreviews}
+          title="Upload files here: "
+        />
         {!validation && (
           <div className="text-center text-red-800">
             Please fill in the entire form!
           </div>
         )}
-        <div className="my-5">
-          <input
-            type="submit"
-            className="transition-all border border-white rounded-md py-2 px-7 hover:border-red-500"
-            onClick={submitHandler}
-          />
-        </div>
+        <ButtonInput clickHandler={submitHandler} title="Submit Files" />
       </form>
     </div>
   );
