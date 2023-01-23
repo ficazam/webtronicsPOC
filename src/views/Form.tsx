@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { MailInput, FileInput, ButtonInput } from "../components";
+import { FileInput, ButtonInput } from "../components";
 
 export const Form = () => {
   const nav = useNavigate();
