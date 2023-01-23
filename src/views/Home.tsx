@@ -10,9 +10,9 @@ export const Home = () => {
   };
 
   return (
-    <div className="h-screen w-full flex items-center justify-center">
+    <div className="h-screen w-full flex flex-col items-center justify-center">
       Welcome to the Webtronic Labs POC! Please sign in:
-      <form className="flex-col justify-center">
+      <form className="py-10 justify-center">
         <MailInput
           mail={mail}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
