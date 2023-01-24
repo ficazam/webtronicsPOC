@@ -1,18 +1,19 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import { Home, Form, Files, Library, SriLanka } from "./views";
+import { Form, Files, Library, SriLanka } from "./views";
 import { Navigation } from "./components";
 
-function App() {
+import { withAuthenticator } from "@aws-amplify/ui-react";
+
+function App({ signOut }: any) {
   return (
     <>
-      <Navigation />
+      <Navigation signOut={signOut} />
       <div>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Files />} />
           <Route path="/form" element={<Form />} />
-          <Route path="/files" element={<Files />} />
           <Route path="/library" element={<Library />} />
           <Route path="/sri-lanka" element={<SriLanka />} />
         </Routes>
@@ -21,4 +22,4 @@ function App() {
   );
 }
 
-export default App;
+export default withAuthenticator(App);
