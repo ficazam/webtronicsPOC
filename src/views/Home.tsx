@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { ButtonInput, MailInput, PasswordInput } from "../components";
+import { ButtonInput, TextInput } from "../components";
 import { Card } from "@aws-amplify/ui-react";
+import { AiOutlineMail } from "react-icons/ai";
 
 export const Home = () => {
   const [mail, setMail] = useState<string>("");
@@ -23,16 +24,22 @@ export const Home = () => {
       <Card className="py-10 justify-center">
         {!validation && <p className="text-red-700">Sign in error</p>}
 
-        <MailInput
-          mail={mail}
+        <TextInput
+          name={mail}
+          icon={<AiOutlineMail />}
+          text="Email: "
+          type="email"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setMail(e.target.value)
           }
         />
-        <PasswordInput
-          pass={password}
+        <TextInput
+          name={password}
+          icon={<AiOutlineMail />}
+          text="Password: "
+          type="password"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setPassword(e.target.value)
+            setMail(e.target.value)
           }
         />
         <div className="flex items-center justify-between">

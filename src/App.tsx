@@ -12,7 +12,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/form" element={<Form />} />
-          <Route path="/files" element={<Files />} />
           <Route path="/library" element={<Library />} />
           <Route path="/sri-lanka" element={<SriLanka />} />
         </Routes>

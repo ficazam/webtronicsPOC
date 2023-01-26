@@ -1,30 +1,29 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  AiOutlineFontSize,
+  AiOutlineCalendar,
+  AiOutlineAlignLeft,
+} from "react-icons/ai";
 
-import { FileInput, ButtonInput } from "../components";
+import { FileInput, ButtonInput, TextInput } from "../components";
+import { iBooks, initialBookState } from "../interfaces";
 
 export const Form = () => {
   const nav = useNavigate();
-  const [email, setEmail] = useState<string>("");
-  const [validation, setValidation] = useState<boolean>(true);
+  const [book, setBook] = useState<iBooks>(initialBookState);
   const [files, setFiles] = useState<File[]>([]);
   const [filesPreviews, setFilesPreviews] = useState<string[]>([]);
 
   const submitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    if (email === "" || !files) {
-      setValidation(false);
-      return;
-    }
+    setBook({ ...book, fileUrl: filesPreviews });
 
-    const fileObj = {
-      files: files,
-    };
+    console.log(book);
 
-    console.log(email, fileObj);
-
-    setEmail("");
+    setBook(initialBookState);
+    setFilesPreviews([]);
     setFiles([]);
     nav("/files");
   };
@@ -32,6 +31,34 @@ export const Form = () => {
   return (
     <div className="h-screen w-full flex items-center justify-center">
       <form>
+        <TextInput
+          name="title"
+          text="Title: "
+          type="text"
+          icon={<AiOutlineFontSize />}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setBook({ ...book, title: e.target.value });
+          }}
+        />
+        <TextInput
+          name="description"
+          text="Description: "
+          type="text"
+          icon={<AiOutlineAlignLeft />}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setBook({ ...book, description: e.target.value });
+          }}
+        />
+        <TextInput
+          name="createdDate"
+          text="Date Created: "
+          type="date"
+          icon={<AiOutlineCalendar />}
+          classNames="cursor-pointer"
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setBook({ ...book, createdDate: e.target.value });
+          }}
+        />
         <FileInput
           setFiles={setFiles}
           files={files}
@@ -39,11 +66,6 @@ export const Form = () => {
           setFilesPreviews={setFilesPreviews}
           title="Upload files here: "
         />
-        {!validation && (
-          <div className="text-center text-red-800">
-            Please fill in the entire form!
-          </div>
-        )}
         <ButtonInput clickHandler={submitHandler} title="Submit Files" />
       </form>
     </div>
