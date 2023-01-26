@@ -39,7 +39,7 @@ export const Home = () => {
           text="Password: "
           type="password"
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setMail(e.target.value)
+            setPassword(e.target.value)
           }
         />
         <div className="flex items-center justify-between">

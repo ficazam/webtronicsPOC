@@ -7,10 +7,7 @@ export const Navigation = () => {
       <nav className="h-full w-full text-center text-lg font-semibold">
         <ul className="h-full w-full flex flex-col justify-evenly">
           <li>
-            <Link to="/form">Upload Files</Link>
-          </li>
-          <li>
-            <Link to="/files">Your Files</Link>
+            <Link to="/form">Add a Book</Link>
           </li>
           <li>
             <Link to="/library">Library</Link>

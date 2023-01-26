@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import { Home, Form, Files, Library, SriLanka } from "./views";
+import { Home, Form, Library, SriLanka } from "./views";
 import { Navigation } from "./components";
 
 function App() {
