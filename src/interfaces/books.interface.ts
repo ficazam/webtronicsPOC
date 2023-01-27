@@ -1,4 +1,5 @@
 export interface iBooks {
+  id: string;
   title: string;
   description: string;
   createdDate: string;
@@ -6,6 +7,7 @@ export interface iBooks {
 }
 
 export const initialBookState: iBooks = {
+  id: "",
   title: "",
   description: "",
   createdDate: "",

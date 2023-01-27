@@ -16,28 +16,44 @@ export const Form = () => {
   const [book, setBook] = useState<iBooks>(initialBookState);
   const [file, setFile] = useState<File | null>(null);
   const [filesPreview, setFilesPreview] = useState<string>("");
+  let url: string;
 
   const submitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     uploadFile();
-
-    setBook({ ...book, fileUrl: filesPreview });
+    //uploadBook();
 
     console.log(book);
 
-    setBook(initialBookState);
     setFilesPreview("");
     setFile(null);
     nav("/library");
   };
 
+  const uploadBook = () => {
+    setBook({ ...book, id: (Math.random() * 1000).toString() });
+
+    axios({
+      method: "PUT",
+      url: `https://kgt7wukn1m.execute-api.us-east-1.amazonaws.com/dev/book-uploader`,
+      data: book,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      console.log("done correctly", response);
+      console.log(book);
+      setBook(initialBookState);
+    });
+  };
+
   const uploadFile = () => {
     if (file) {
       axios(
-        `https://kgt7wukn1m.execute-api.us-east-1.amazonaws.com/webtronics_poc/presigned-url?fileName=${file.name}`
+        `https://kgt7wukn1m.execute-api.us-east-1.amazonaws.com/dev/presigned-url-2?fileName=${file.name}`
       ).then((response) => {
-        const url = response.data.fileUploadURL;
+        url = response.data.fileUploadURL;
 
         axios({
           method: "PUT",
@@ -46,7 +62,10 @@ export const Form = () => {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        }).then((resp) => console.log(resp.data));
+        }).then((resp) => {
+          console.log(resp);
+          setBook({ ...book, fileUrl: url });
+        });
       });
     }
   };
