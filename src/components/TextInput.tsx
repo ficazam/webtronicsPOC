@@ -8,10 +8,12 @@ interface iTextInputProps {
   classNames?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
+  value?: string;
 }
 
 export const TextInput = ({
   onChange,
+  value = "",
   text,
   type,
   icon,
@@ -25,6 +27,7 @@ export const TextInput = ({
         <label className="px-2">{text}: </label>
         {icon}
         <input
+          value={value}
           name={name}
           type={type}
           onChange={onChange}

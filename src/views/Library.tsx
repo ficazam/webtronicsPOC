@@ -31,9 +31,10 @@ export const Library = () => {
   };
 
   const deleteBookHandler = async (id: string) => {
+    console.log(id);
     try {
-      await API.graphql(graphqlOperation(deleteBook, { input: id }));
-      console.log("deleted");
+      await API.graphql(graphqlOperation(deleteBook, { input: { id: id } }));
+      await fetchBooks();
     } catch (e) {
       console.log(e);
     }

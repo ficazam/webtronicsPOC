@@ -42,7 +42,6 @@ export const Form = () => {
 
     try {
       uploadFile();
-      console.log(finishedBook);
       nav("/");
     } catch (e) {
       console.log(e);
@@ -75,6 +74,7 @@ export const Form = () => {
           name="title"
           text="Title: "
           type="text"
+          value={book.title}
           icon={<AiOutlineFontSize />}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setBook({ ...book, title: e.target.value });
@@ -85,6 +85,7 @@ export const Form = () => {
           name="description"
           text="Description: "
           type="text"
+          value={book.description}
           icon={<AiOutlineAlignLeft />}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
             setBook({ ...book, description: e.target.value });
@@ -96,6 +97,7 @@ export const Form = () => {
           icon={<AiOutlineMail />}
           text="Email: "
           type="email"
+          value={book.owner}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             setBook({ ...book, owner: e.target.value })
           }

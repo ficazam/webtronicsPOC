@@ -6,7 +6,7 @@ import { ButtonInput } from "../components";
 import { weathercodeConverter } from "../helpers";
 
 export const SriLanka = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [weather, setWeather] = useState<iWeather>(initialWeatherState);
   const [weatherForecast, setWeatherForecast] = useState<string>("");
 
@@ -18,21 +18,26 @@ export const SriLanka = () => {
     ).then((response) => {
       setWeather(response.data.current_weather);
       setWeatherForecast(() => weathercodeConverter(weather.weathercode));
+      setLoading(false);
 
       console.log("reloaded");
     });
-
-    setLoading(false);
   };
 
   useEffect(() => {
     weatherPainter();
   }, []);
 
-  if (loading) return <p>L O A D I N G . . . </p>;
+  if (loading)
+    return (
+      <p className="h-screen w-full flex items-center justify-center">
+        L O A D I N G . . .
+      </p>
+    );
+
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center">
-      This is the current weather in Sri Lanka:
+      This is the current weather in Sri Lanka (Colombo):
       <Card className="py-10 justify-center items-center">
         <div className="flex flex-col justify-center items-center">
           <div className="w-full flex items-center justify-evenly">
