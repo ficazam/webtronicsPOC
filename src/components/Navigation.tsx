@@ -7,16 +7,14 @@ export const Navigation = () => {
       <nav className="h-full w-full text-center text-lg font-semibold">
         <ul className="h-full w-full flex flex-col justify-evenly">
           <li>
+            <Link to="/">Library</Link>
+          </li>
+          <li>
             <Link to="/form">Add a Book</Link>
           </li>
-          <li>
-            <Link to="/library">Library</Link>
-          </li>
+
           <li>
             <Link to="/sri-lanka">Weather in Sri Lanka</Link>
-          </li>
-          <li>
-            <button>Sign Out</button>
           </li>
         </ul>
       </nav>

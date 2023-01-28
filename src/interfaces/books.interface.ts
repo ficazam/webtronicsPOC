@@ -2,14 +2,18 @@ export interface iBooks {
   id: string;
   title: string;
   description: string;
-  createdDate: string;
+  createdAt: string;
+  updatedAt: string;
   fileUrl: string;
+  owner: string;
 }
 
 export const initialBookState: iBooks = {
   id: "",
   title: "",
   description: "",
-  createdDate: "",
+  createdAt: "",
+  updatedAt: "",
   fileUrl: "",
+  owner: "",
 };

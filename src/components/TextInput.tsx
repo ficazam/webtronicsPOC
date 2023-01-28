@@ -7,6 +7,7 @@ interface iTextInputProps {
   type: string;
   classNames?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
 }
 
 export const TextInput = ({
@@ -16,6 +17,7 @@ export const TextInput = ({
   icon,
   name,
   classNames,
+  required = false,
 }: iTextInputProps) => {
   return (
     <div className="py-5">
@@ -23,11 +25,11 @@ export const TextInput = ({
         <label className="px-2">{text}: </label>
         {icon}
         <input
-          required
           name={name}
           type={type}
           onChange={onChange}
           className={`focus:outline-none ${classNames}`}
+          required={required}
         />
       </div>
     </div>

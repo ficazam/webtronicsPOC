@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   AiOutlineFontSize,
   AiOutlineAlignLeft,
@@ -11,17 +11,43 @@ import { iBooks, initialBookState } from "../interfaces";
 
 import axios from "axios";
 import { API, graphqlOperation } from "aws-amplify";
-import { createBook } from "../graphql/mutations";
+import { getBook } from "../graphql/queries";
+import { updateBook } from "../graphql/mutations";
 
-export const Form = () => {
+export const EditForm = () => {
   const nav = useNavigate();
   const [book, setBook] = useState<iBooks>(initialBookState);
+  const [loading, setLoading] = useState<boolean>(true);
   const [file, setFile] = useState<File | null>(null);
   const [filesPreview, setFilesPreview] = useState<string>("");
+  const { id } = useParams();
 
-  const bookCreator = async (finishedBook: iBooks) => {
+  const fetchBooks = async () => {
+    setLoading(true);
+    let bookData: any;
+
     try {
-      await API.graphql(graphqlOperation(createBook, { input: finishedBook }));
+      bookData = (await API.graphql(
+        graphqlOperation(getBook, { input: id })
+      )) as {
+        data: any;
+        errors: any[];
+      };
+
+      console.log(bookData);
+
+      //const bookList = bookData.data.listBooks.items;
+
+      //setBook(bookList);
+      setLoading(false);
+    } catch (e) {
+      console.log("this is an error", e);
+    }
+  };
+
+  const bookEditor = async (finishedBook: iBooks) => {
+    try {
+      await API.graphql(graphqlOperation(updateBook, { input: finishedBook }));
     } catch (e) {
       console.log(e);
     }
@@ -30,15 +56,18 @@ export const Form = () => {
   const submitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    const finishedBook: iBooks = {
-      ...book,
-      id: (Math.random() * 1000).toString(),
-      createdAt: new Date().toLocaleDateString(),
-      updatedAt: new Date().toLocaleDateString(),
-      fileUrl: `https://wl-poc-files.s3.amazonaws.com/${file!.name}`,
-    };
+    const finishedBook: iBooks = file
+      ? {
+          ...book,
+          updatedAt: new Date().toLocaleDateString(),
+          fileUrl: `https://wl-poc-files.s3.amazonaws.com/${file!.name}`,
+        }
+      : {
+          ...book,
+          updatedAt: new Date().toLocaleDateString(),
+        };
 
-    bookCreator(finishedBook);
+    bookEditor(finishedBook);
 
     try {
       uploadFile();
@@ -48,6 +77,10 @@ export const Form = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    fetchBooks();
+  }, []);
 
   const uploadFile = () => {
     if (file) {
@@ -68,11 +101,18 @@ export const Form = () => {
     }
   };
 
+  if (loading)
+    return (
+      <p className="h-screen w-full flex items-center justify-center">
+        L O A D I N G . . .
+      </p>
+    );
+
   return (
     <div className="h-screen w-full flex items-center justify-center">
       <form>
         <TextInput
-          name="title"
+          name={book.title}
           text="Title: "
           type="text"
           icon={<AiOutlineFontSize />}
@@ -82,7 +122,7 @@ export const Form = () => {
           required={true}
         />
         <TextInput
-          name="description"
+          name={book.description}
           text="Description: "
           type="text"
           icon={<AiOutlineAlignLeft />}
@@ -92,7 +132,7 @@ export const Form = () => {
           required={true}
         />
         <TextInput
-          name="owner"
+          name={book.owner}
           icon={<AiOutlineMail />}
           text="Email: "
           type="email"

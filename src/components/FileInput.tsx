@@ -4,16 +4,14 @@ interface IFileInput {
   setFile: (file: File | null) => void;
   setFilesPreview: (preview: string) => void;
   deleteFile?: (fileToDelete: string, newFile: string) => void;
+  required?: boolean;
   title?: string;
 }
 
 export const FileInput = ({
-  file,
-  filesPreview,
   setFile,
   setFilesPreview,
-  deleteFile,
-  title,
+  required = false,
 }: IFileInput) => {
   const fileSelectedHandler = async (
     e: React.ChangeEvent<HTMLInputElement>
@@ -35,28 +33,16 @@ export const FileInput = ({
     }
   };
 
-  const deleteFileHandler = async (index: number) => {
-    let fileToDelete: string = "";
-    const regexp = /^(ftp|http|https):\/\/[^ "]+$/;
-
-    if (regexp.test(filesPreview)) {
-      fileToDelete = filesPreview.split("/")[3];
-
-      setFile(null);
-      setFilesPreview("");
-
-      deleteFile && deleteFile(fileToDelete, fileToDelete);
-    } else {
-      console.log("not valid URL");
-    }
-  };
-
   return (
     <div className="w-full">
       <div className="flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
         <div className="space-y-1 text-center">
           <label>
-            <input type="file" onChange={fileSelectedHandler} />
+            <input
+              type="file"
+              onChange={fileSelectedHandler}
+              required={required}
+            />
           </label>
         </div>
       </div>

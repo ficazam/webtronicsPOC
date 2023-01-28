@@ -6,7 +6,6 @@ import { AiOutlineMail } from "react-icons/ai";
 export const Home = () => {
   const [mail, setMail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [validation, setValidation] = useState<boolean>(true);
 
   const authHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -20,10 +19,8 @@ export const Home = () => {
 
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center">
-      Welcome to the Webtronic Labs POC! Please sign in:
+      Welcome to the Webtronic Labs POC!
       <Card className="py-10 justify-center">
-        {!validation && <p className="text-red-700">Sign in error</p>}
-
         <TextInput
           name={mail}
           icon={<AiOutlineMail />}
