@@ -15,6 +15,7 @@ import { createBook } from "../graphql/mutations";
 
 export const Form = () => {
   const nav = useNavigate();
+  const [formValidation, setFormValidation] = useState<boolean>(false);
   const [book, setBook] = useState<iBooks>(initialBookState);
   const [file, setFile] = useState<File | null>(null);
   const [filesPreview, setFilesPreview] = useState<string>("");
@@ -27,8 +28,13 @@ export const Form = () => {
     }
   };
 
-  const submitHandler = (e: React.SyntheticEvent) => {
+  const submitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+
+    if (book.title === "" || book.description === "" || book.owner === "") {
+      setFormValidation(true);
+      return;
+    }
 
     const finishedBook: iBooks = {
       ...book,
@@ -38,32 +44,49 @@ export const Form = () => {
       fileUrl: `https://wl-poc-files.s3.amazonaws.com/${file!.name}`,
     };
 
-    bookCreator(finishedBook);
+    setFormValidation(false);
 
     try {
-      uploadFile();
+      await bookCreator(finishedBook);
+      await uploadFile();
+      await sendEmailHandler(finishedBook);
       nav("/");
     } catch (e) {
       console.log(e);
     }
   };
 
-  const uploadFile = () => {
+  const uploadFile = async () => {
     if (file) {
-      axios(
+      const response = await axios(
         `https://kgt7wukn1m.execute-api.us-east-1.amazonaws.com/dev/presigned-url-2?fileName=${file.name}`
-      ).then((response) => {
-        let url: string = response.data.fileUploadURL;
+      );
 
-        axios({
-          method: "PUT",
-          url: url,
-          data: file,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+      const url = response.data.fileUploadURL;
+
+      await axios({
+        method: "PUT",
+        url: url,
+        data: file,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+    }
+  };
+
+  const sendEmailHandler = async (emailBook: iBooks) => {
+    try {
+      await axios({
+        method: "POST",
+        url: `https://kgt7wukn1m.execute-api.us-east-1.amazonaws.com/dev/email-sender`,
+        data: emailBook,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -111,6 +134,9 @@ export const Form = () => {
           title="Upload files here: "
           required={true}
         />
+        {formValidation && (
+          <p className="text-red-500 pt-5">Please fill out the entire form.</p>
+        )}
         <ButtonInput clickHandler={submitHandler} title="Submit Book" />
       </form>
     </div>

@@ -9,9 +9,11 @@ import { Card } from "@aws-amplify/ui-react";
 import { ButtonInput } from "../components";
 import { deleteBook } from "../graphql/mutations";
 
+import axios from "axios";
+
 export const Library = () => {
   const [books, setBooks] = useState<iBooks[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const fetchBooks = async () => {
     setLoading(true);
@@ -31,13 +33,26 @@ export const Library = () => {
   };
 
   const deleteBookHandler = async (id: string) => {
-    console.log(id);
     try {
       await API.graphql(graphqlOperation(deleteBook, { input: { id: id } }));
       await fetchBooks();
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const downloadFileHandler = async (filePath: string) => {
+    const fileName = filePath.split("/")[3];
+    console.log(fileName);
+
+    await axios({
+      method: "POST",
+      url: "https://kgt7wukn1m.execute-api.us-east-1.amazonaws.com/dev/presigned-url-2/get-file",
+      data: fileName,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   };
 
   useEffect(() => {
@@ -60,7 +75,15 @@ export const Library = () => {
               <p className="text-lg font-semibold">Title: {book.title}</p>
               <p>Description: {book.description}</p>
               <p>Date Created: {book.createdAt}</p>
-              <p>File: {book.fileUrl}</p>
+              <p className="flex">
+                File:{" "}
+                <span
+                  className="text-blue-500 cursor-pointer"
+                  onClick={() => downloadFileHandler(book.fileUrl)}
+                >
+                  {book.fileUrl}
+                </span>
+              </p>
               <div className="flex items-center justify-between">
                 <Link to={`/${book.id}`}>Edit Book</Link>
                 <ButtonInput
