@@ -16,6 +16,7 @@ import { createBook } from "../graphql/mutations";
 export const Form = () => {
   const nav = useNavigate();
   const [formValidation, setFormValidation] = useState<boolean>(false);
+  const [sending, setSending] = useState<boolean>(false);
   const [book, setBook] = useState<iBooks>(initialBookState);
   const [file, setFile] = useState<File | null>(null);
   const [filesPreview, setFilesPreview] = useState<string>("");
@@ -30,6 +31,7 @@ export const Form = () => {
 
   const submitHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setSending(true);
 
     if (book.title === "" || book.description === "" || book.owner === "") {
       setFormValidation(true);
@@ -54,6 +56,8 @@ export const Form = () => {
     } catch (e) {
       console.log(e);
     }
+
+    setSending(false);
   };
 
   const uploadFile = async () => {
@@ -137,7 +141,11 @@ export const Form = () => {
         {formValidation && (
           <p className="text-red-500 pt-5">Please fill out the entire form.</p>
         )}
-        <ButtonInput clickHandler={submitHandler} title="Submit Book" />
+        <ButtonInput
+          clickHandler={submitHandler}
+          disabled={sending}
+          title="Submit Book"
+        />
       </form>
     </div>
   );

@@ -17,6 +17,7 @@ export const EditForm = () => {
   const nav = useNavigate();
   const [book, setBook] = useState<iBooks>(initialBookState);
   const [loading, setLoading] = useState<boolean>(true);
+  const [sending, setSending] = useState<boolean>(false);
   const { id } = useParams();
 
   const fetchBooks = async () => {
@@ -48,6 +49,7 @@ export const EditForm = () => {
 
   const submitHandler = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setSending(true);
 
     const finishedBook: iBooks = {
       ...book,
@@ -61,6 +63,7 @@ export const EditForm = () => {
     } catch (e) {
       console.log(e);
     }
+    setSending(false);
   };
 
   useEffect(() => {
@@ -110,7 +113,11 @@ export const EditForm = () => {
           }
           required={true}
         />
-        <ButtonInput clickHandler={submitHandler} title="Submit Book" />
+        <ButtonInput
+          clickHandler={submitHandler}
+          disabled={sending}
+          title="Submit Book"
+        />
       </form>
     </div>
   );

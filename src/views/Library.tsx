@@ -13,6 +13,7 @@ import axios from "axios";
 
 export const Library = () => {
   const [books, setBooks] = useState<iBooks[]>([]);
+  const [sending, setSending] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
 
   const fetchBooks = async () => {
@@ -33,12 +34,14 @@ export const Library = () => {
   };
 
   const deleteBookHandler = async (id: string) => {
+    setSending(true);
     try {
       await API.graphql(graphqlOperation(deleteBook, { input: { id: id } }));
       await fetchBooks();
     } catch (e) {
       console.log(e);
     }
+    setSending(false);
   };
 
   const downloadFileHandler = async (filePath: string) => {
@@ -90,6 +93,7 @@ export const Library = () => {
                   clickHandler={() => {
                     deleteBookHandler(book.id);
                   }}
+                  disabled={sending}
                   title="Delete Book"
                 />
               </div>
