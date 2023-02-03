@@ -50,7 +50,7 @@ export const Library = () => {
 
     await axios({
       method: "POST",
-      url: "https://kgt7wukn1m.execute-api.us-east-1.amazonaws.com/dev/presigned-url-2/get-file",
+      url: "https://kgt7wukn1m.execute-api.us-east-1.amazonaws.com/dev/file-getter",
       data: fileName,
       headers: {
         "Content-Type": "multipart/form-data",

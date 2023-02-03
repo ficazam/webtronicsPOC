@@ -74,6 +74,7 @@ export const Form = () => {
         data: file,
         headers: {
           "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": "*",
         },
       });
     }
